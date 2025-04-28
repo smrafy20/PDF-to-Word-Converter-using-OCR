@@ -1,3 +1,4 @@
+\templates\download.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +55,7 @@
                         <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                         <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
                     </svg>
-                    Download .docx File
+                    Download {{ ".docx" if format == "docx" else ".txt" }} File
                 </a>
             </div>
         </div>
@@ -63,11 +64,19 @@
             <div class="card-header">What's Next?</div>
             <div class="card-body">
                 <p>After downloading your file:</p>
+                {% if format == "docx" %}
                 <ul>
                     <li>The file can be opened with Microsoft Word, Google Docs, or any word processor that supports .docx format.</li>
                     <li>Each page of the original PDF has been processed separately and appears on its own page in the document.</li>
                     <li>You may need to adjust formatting or correct any text that wasn't accurately extracted.</li>
                 </ul>
+                {% else %}
+                <ul>
+                    <li>The file can be opened with any text editor like Notepad, VS Code, or similar applications.</li>
+                    <li>Each page of the original PDF is separated by a page break marker in the text file.</li>
+                    <li>The text file preserves all extracted content but without formatting.</li>
+                </ul>
+                {% endif %}
                 <div class="d-grid gap-2">
                     <a href="{{ url_for('index') }}" class="btn btn-primary">Process Another PDF</a>
                 </div>

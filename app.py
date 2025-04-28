@@ -37,6 +37,11 @@ def index():
             flash('No file selected')
             return redirect(request.url)
         
+        # Check for output format (default to docx if not specified)
+        output_format = request.form.get('output_format', 'docx')
+        if output_format not in ['docx', 'txt']:
+            output_format = 'docx'  # Default to docx if invalid format specified
+        
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -74,16 +79,29 @@ def index():
                     else:
                         all_extracted_text.append(extracted_text)
                 
-                # Create output docx
-                output_filename = os.path.splitext(filename)[0] + "_extracted.docx"
-                output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
+                # Save output based on selected format
+                base_output_filename = os.path.splitext(filename)[0]
                 
-                from docx import Document
-                document = Document()
-                for page_text in all_extracted_text:
-                    document.add_paragraph(page_text)
-                    document.add_page_break()
-                document.save(output_path)
+                if output_format == 'docx':
+                    # Create output docx
+                    output_filename = f"{base_output_filename}_extracted.docx"
+                    output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
+                    
+                    from docx import Document
+                    document = Document()
+                    for page_text in all_extracted_text:
+                        document.add_paragraph(page_text)
+                        document.add_page_break()
+                    document.save(output_path)
+                else:  # txt format
+                    output_filename = f"{base_output_filename}_extracted.txt"
+                    output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
+                    
+                    with open(output_path, 'w', encoding='utf-8') as txt_file:
+                        for i, page_text in enumerate(all_extracted_text):
+                            txt_file.write(page_text)
+                            if i < len(all_extracted_text) - 1:
+                                txt_file.write("\n\n--- Page Break ---\n\n")
                 
                 # Clean up temporary directory
                 if temp_dir and os.path.exists(temp_dir):
@@ -94,7 +112,7 @@ def index():
                     flash('Some pages could not be processed correctly. Please check the downloaded file.')
                 
                 # Provide download page
-                return render_template('download.html', filename=output_filename)
+                return render_template('download.html', filename=output_filename, format=output_format)
             
             except Exception as e:
                 flash(f'An error occurred during processing: {str(e)}')
