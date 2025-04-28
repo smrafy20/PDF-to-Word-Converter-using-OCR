@@ -11,7 +11,7 @@ import shutil  # For cleanup
 from docx import Document  # For creating .docx files
 
 # Set your Google API key directly in the code
-API_KEY = "AIzaSyB0yZWHCh_GsBuzlgeSrwFa84DMztRNUxQ"  # Replace with your actual API key
+API_KEY = " "  # Replace with your actual API key
 
 # Input PDF file (in the same directory as this script)
 INPUT_PDF = "bmcq.pdf"  # Replace with your actual PDF filename
