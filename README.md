@@ -7,7 +7,8 @@ A web application that uses Google's Gemini AI to extract text from PDF document
 - Upload PDF files through a user-friendly web interface
 - Convert PDFs to images for better processing
 - Extract text from images using Google's Gemini AI model
-- Save extracted text as Word (DOCX) documents
+- Save extracted text as Word (DOCX) or plain text (TXT) documents
+- Format selection option for output files
 - Support for multilingual text extraction
 
 ## Prerequisites
@@ -66,7 +67,7 @@ Before running this application, you'll need:
    - Enter your Google Gemini API key
    - Upload a PDF file (maximum size: 16MB)
    - Click "Extract Text" to process the file
-   - Download the extracted text as a .docx file
+   - Download the extracted text as a .docx or .txt file
 
 ## Configuration
 
